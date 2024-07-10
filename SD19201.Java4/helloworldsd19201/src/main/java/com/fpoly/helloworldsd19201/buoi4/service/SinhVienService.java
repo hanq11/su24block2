@@ -31,11 +31,13 @@ public class SinhVienService {
         danhSach.add(sv);
     }
     public void deleteSinhVien(String maSinhVien) {
+        List<SinhVien> temp = new ArrayList<>();
         for(SinhVien sv: danhSach) {
             if(sv.getMaSinhVien().equals(maSinhVien)) {
-                danhSach.remove(sv);
+                temp.add(sv);
             }
         }
+        danhSach.removeAll(temp);
     }
     public void updateSinhVien(SinhVien sv) {
         for(int i = 0; i < danhSach.size(); i++) {
