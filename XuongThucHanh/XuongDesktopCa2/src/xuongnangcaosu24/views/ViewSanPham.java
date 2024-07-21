@@ -5,8 +5,11 @@
 package xuongnangcaosu24.views;
 
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
+import xuongnangcaosu24.entity.MauSac;
 import xuongnangcaosu24.entity.SanPham;
+import xuongnangcaosu24.repositories.MauSacRepository;
 import xuongnangcaosu24.repositories.SanPhamRepository;
 
 /**
@@ -16,15 +19,27 @@ import xuongnangcaosu24.repositories.SanPhamRepository;
 public class ViewSanPham extends javax.swing.JPanel {
     private SanPhamRepository sanPhamRepo;
     private DefaultTableModel dtm;
+    private DefaultComboBoxModel dcbm;
+    private MauSacRepository mauSacRepository;
     /**
      * Creates new form ViewSanPham
      */
     public ViewSanPham() {
         initComponents();
         sanPhamRepo = new SanPhamRepository();
+        mauSacRepository = new MauSacRepository();
         dtm = (DefaultTableModel) tblSanPham.getModel();
+        dcbm = (DefaultComboBoxModel) cbbMauSac.getModel();
         showSanPhamTable(sanPhamRepo.getAll());
         tblSanPham.setRowSelectionInterval(2, 2);
+        showCBBMauSac(mauSacRepository.getAll());
+    }
+    
+    private void showCBBMauSac(ArrayList<MauSac> danhSach) {
+        dcbm.removeAllElements();
+        for(MauSac ms: danhSach) {
+            dcbm.addElement(ms.getTen());
+        }
     }
 
     private void showSanPhamTable(ArrayList<SanPham> list) {
@@ -55,7 +70,11 @@ public class ViewSanPham extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSanPham = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        cbbMauSac = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
+        txtIdMauSac = new javax.swing.JLabel();
+        btnChon = new javax.swing.JToggleButton();
 
         jLabel1.setText("Quan ly san pham");
 
@@ -121,7 +140,7 @@ public class ViewSanPham extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSua)
                 .addGap(48, 48, 48))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,23 +162,55 @@ public class ViewSanPham extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("San pham", jPanel1);
 
-        jLabel3.setText("Chi tiet san pham");
+        jLabel5.setText("MauSac");
+
+        cbbMauSac.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel3.setText("ID mau sac da chon");
+
+        btnChon.setText("Chon");
+        btnChon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(cbbMauSac, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(97, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(txtIdMauSac)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(217, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(154, 154, 154))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnChon)
+                .addGap(138, 138, 138))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(jLabel3)
-                .addContainerGap(322, Short.MAX_VALUE))
+                .addGap(15, 15, 15)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(cbbMauSac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtIdMauSac))
+                .addGap(18, 18, 18)
+                .addComponent(btnChon)
+                .addContainerGap(269, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Chi tiet san pham", jPanel2);
@@ -214,20 +265,32 @@ public class ViewSanPham extends javax.swing.JPanel {
         txtTen.setText(sp.getTen());
     }//GEN-LAST:event_tblSanPhamMouseClicked
 
+    private void btnChonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChonActionPerformed
+        int index = cbbMauSac.getSelectedIndex();
+        txtIdMauSac.setText(String.valueOf(index));
+        ArrayList<MauSac> danhSach = mauSacRepository.getAll();
+        MauSac msDuocChon = danhSach.get(index);
+        msDuocChon.getId();
+    }//GEN-LAST:event_btnChonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton btnChon;
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
+    private javax.swing.JComboBox<String> cbbMauSac;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable tblSanPham;
+    private javax.swing.JLabel txtIdMauSac;
     private javax.swing.JTextField txtMa;
     private javax.swing.JTextField txtTen;
     // End of variables declaration//GEN-END:variables
