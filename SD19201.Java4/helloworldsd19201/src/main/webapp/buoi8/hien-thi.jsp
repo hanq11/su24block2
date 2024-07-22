@@ -11,6 +11,7 @@
 <head>
     <title>Title</title>
 </head>
+<button><a href="/bac-si/view-add">Them</a></button>
 <body>
     <h2>Table</h2>
     <table>
@@ -19,6 +20,7 @@
                 <th>ID</th>
                 <th>Ten</th>
                 <th>Tuoi</th>
+                <th colspan="3">Hanh dong</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +29,11 @@
                     <td>${bs.id}</td>
                     <td>${bs.ten}</td>
                     <td>${bs.tuoi}</td>
+                    <td>
+                        <a href="/bac-si/delete?id=${bs.id}">Delete</a>
+                        <a href="/bac-si/detail?id=${bs.id}">Detail</a>
+                        <a href="/bac-si/view-update?id=${bs.id}">Update</a>
+                    </td>
                 </tr>
             </c:forEach>
         </tbody>
