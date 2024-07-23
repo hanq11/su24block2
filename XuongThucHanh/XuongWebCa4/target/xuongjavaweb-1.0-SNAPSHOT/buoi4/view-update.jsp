@@ -13,7 +13,7 @@
 <body>
 <h2>Update</h2>
 <form action="/bac-si/update" method="post">
-    ID: <input type="text" name="id" value="${bs.id}" disabled> <br>
+    ID: <input type="text" name="id" value="${bs.id}" readonly> <br>
     Ten: <input type="text" name="ten" value="${bs.ten}"> <br>
     Tuoi: <input type="number" name="tuoi" value="${bs.tuoi}"> <br>
     <button type="submit">Submit</button>
