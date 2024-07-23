@@ -4,10 +4,21 @@
  */
 package xuongnangcaosu24.responses;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  *
  * @author syn
  */
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ChiTietSPResponse {
     private Integer Id;
     private String tenSanPham;

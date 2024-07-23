@@ -23,7 +23,7 @@ public class HoaDonChiTietRepository {
                      SELECT hdct.Id, hdct.IdHoaDon, hdct.IdChiTietSP, sp.Ten, hdct.SoLuong, hdct.DonGia
                      FROM HoaDonChiTiet hdct
                      INNER JOIN ChiTietSP ctsp ON hdct.IdChiTietSP = ctsp.Id
-                     INNER JOIN SanPham sp ON ctsp.IdDongSP = sp.Id
+                     INNER JOIN SanPham sp ON ctsp.IdSP = sp.Id
                      WHERE hdct.IdHoaDon = ?
                      """;
         try(Connection con = DbConnection.getConnection();
@@ -47,5 +47,23 @@ public class HoaDonChiTietRepository {
             e.printStackTrace();
         }
         return null; 
+    }
+    
+    public void addHDCT(HoaDonChiTiet hdct) {
+        String sql = """
+                        INSERT INTO HoaDonChiTiet 
+                        (IdHoaDon, IdChiTietSP, SoLuong, DonGia)
+                        VALUES (?, ?, ?, ?)
+                     """;
+        try(Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, hdct.getIdHoaDon());
+            ps.setInt(2, hdct.getIdChiTietSP());
+            ps.setInt(3, hdct.getSoLuong());
+            ps.setInt(4, hdct.getDonGia());
+            ps.execute();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

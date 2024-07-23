@@ -51,4 +51,21 @@ public class HoaDonRepository {
             e.printStackTrace();
         }
     }
+    
+    public void thanhToan(HoaDon hd) {
+        String sql = """
+                     UPDATE HoaDon
+                     SET TinhTrang = 1, 
+                     TongTien = ?
+                     WHERE Id = ?
+                     """;
+        try(Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, hd.getTongTien());
+            ps.setInt(2, hd.getId());
+            ps.execute();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
