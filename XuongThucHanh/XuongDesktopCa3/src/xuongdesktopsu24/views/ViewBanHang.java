@@ -5,10 +5,15 @@
 package xuongdesktopsu24.views;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import xuongdesktopsu24.entity.ChiTietSP;
 import xuongdesktopsu24.entity.HoaDon;
+import xuongdesktopsu24.entity.HoaDonChiTiet;
+import xuongdesktopsu24.repositories.ChiTietSPRepository;
 import xuongdesktopsu24.repositories.HoaDonChiTietRepository;
 import xuongdesktopsu24.repositories.HoaDonRepository;
+import xuongdesktopsu24.responses.ChiTietSPResponse;
 import xuongdesktopsu24.responses.HoaDonChiTietResponse;
 
 /**
@@ -21,6 +26,7 @@ public class ViewBanHang extends javax.swing.JPanel {
     DefaultTableModel dtmSanPham;
     HoaDonRepository hoaDonRepository;
     HoaDonChiTietRepository hoaDonChiTietRepository;
+    ChiTietSPRepository chiTietSPRepository;
     /**
      * Creates new form ViewBanHang
      */
@@ -31,7 +37,9 @@ public class ViewBanHang extends javax.swing.JPanel {
         dtmSanPham = (DefaultTableModel) tblSanPham.getModel();
         hoaDonRepository = new HoaDonRepository();
         hoaDonChiTietRepository = new HoaDonChiTietRepository();
+        chiTietSPRepository = new ChiTietSPRepository();
         showTableHoaDon(hoaDonRepository.getAllHoaDonChuaThanhToan());
+        showTableChiTietSP(chiTietSPRepository.getAllChiTietSP());
     }
     
     private void showTableHoaDon(ArrayList<HoaDon> danhSach) {
@@ -53,6 +61,19 @@ public class ViewBanHang extends javax.swing.JPanel {
                         hdct.getTenSanPham(),
                         hdct.getSoLuong(),
                         hdct.getGiaBan()
+                    });
+        }
+    }
+    
+    private void showTableChiTietSP(ArrayList<ChiTietSPResponse> danhSach) {
+        dtmSanPham.setRowCount(0);
+        for(ChiTietSPResponse ctsp: danhSach) {
+            dtmSanPham.addRow(new Object[]{
+                        ctsp.getId(),
+                        ctsp.getTenSanPham(),
+                        ctsp.getTenMauSac(),
+                        ctsp.getSoLuongTOn(),
+                        ctsp.getGiaBan()
                     });
         }
     }
@@ -117,6 +138,11 @@ public class ViewBanHang extends javax.swing.JPanel {
                 "IDSP", "TenSP", "MauSac", "SoLuongTon", "GiaBan"
             }
         ));
+        tblSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSanPhamMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tblSanPham);
 
         jLabel1.setText("Hoa don");
@@ -135,6 +161,11 @@ public class ViewBanHang extends javax.swing.JPanel {
         jLabel4.setText("Sdt");
 
         btnThanhToan.setText("Thanh Toan");
+        btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThanhToanActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Tong tien");
 
@@ -222,6 +253,48 @@ public class ViewBanHang extends javax.swing.JPanel {
                 , 0).toString());
         showTableHoaDonChiTiet(hoaDonChiTietRepository.getHoaDonChiTietByIdHoaDon(idHoaDon));
     }//GEN-LAST:event_tblHoaDonMouseClicked
+
+    private void tblSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSanPhamMouseClicked
+        int soLuongSP = Integer.valueOf(JOptionPane.showInputDialog("Vui long nhap so luong san pham: "));
+        int idHoaDon = Integer.valueOf(tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 0).toString());
+        int idCTSP = Integer.valueOf(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 0).toString());
+        int giaBan = Integer.valueOf(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 4).toString());
+        
+        HoaDonChiTiet hdct = HoaDonChiTiet.builder()
+                .idHoaDon(idHoaDon)
+                .idChiTietSP(idCTSP)
+                .soLuong(soLuongSP)
+                .giaBan(giaBan)
+                .build();
+        hoaDonChiTietRepository.addHDCT(hdct);
+        int soLuongSPConLai = Integer.valueOf(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 3).toString()) - soLuongSP;
+        chiTietSPRepository.updateSoLuongSP(
+                ChiTietSP.builder()
+                .Id(Integer.valueOf(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 0).toString()))
+                .SoLuongTon(soLuongSPConLai)
+                .build()
+            );
+        showTableChiTietSP(chiTietSPRepository.getAllChiTietSP());
+        showTableHoaDonChiTiet(hoaDonChiTietRepository.getHoaDonChiTietByIdHoaDon(idHoaDon));
+    }//GEN-LAST:event_tblSanPhamMouseClicked
+
+    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
+        int tongTien = 0;
+        for(int i = 0; i < tblGioHang.getRowCount(); i++) {
+            int soLuong = Integer.valueOf(tblGioHang.getValueAt(i, 2).toString());
+            int giaBan = Integer.valueOf(tblGioHang.getValueAt(i, 3).toString());
+            tongTien += (soLuong * giaBan);
+        }
+        
+        hoaDonRepository.thanhToan(
+                HoaDon.builder()
+                .id(Integer.valueOf(tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 0).toString()))
+                .tongTien(tongTien)
+                .build()
+            );
+        showTableHoaDon(hoaDonRepository.getAllHoaDonChuaThanhToan());
+        dtmGioHang.setRowCount(0);
+    }//GEN-LAST:event_btnThanhToanActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
