@@ -1,27 +1,22 @@
 package com.fpoly.helloworldsd19201.buoi8.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.UtilityClass;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "BacSi")
-public class BacSi {
+@Table(name = "PhongKham")
+public class PhongKham {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "ten")
     private String ten;
-
-    @Column(name = "tuoi")
-    private Integer tuoi;
-
-    @ManyToOne
-    @JoinColumn(name = "idPhongKham", referencedColumnName = "id")
-    private PhongKham phongKham;
 }

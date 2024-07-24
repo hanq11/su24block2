@@ -20,6 +20,7 @@
                 <th>ID</th>
                 <th>Ten</th>
                 <th>Tuoi</th>
+                <th>Ten phong kham</th>
                 <th colspan="3">Hanh dong</th>
             </tr>
         </thead>
@@ -29,6 +30,7 @@
                     <td>${bs.id}</td>
                     <td>${bs.ten}</td>
                     <td>${bs.tuoi}</td>
+                    <td>${bs.phongKham.ten}</td>
                     <td>
                         <a href="/bac-si/delete?id=${bs.id}">Delete</a>
                         <a href="/bac-si/detail?id=${bs.id}">Detail</a>

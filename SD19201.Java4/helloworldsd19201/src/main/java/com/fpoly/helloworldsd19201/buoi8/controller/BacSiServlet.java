@@ -47,7 +47,7 @@ public class BacSiServlet extends HttpServlet {
     }
 
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        bacSiRepository.deleteBacSi(new BacSi(Integer.valueOf(req.getParameter("id")), null, null));
+        bacSiRepository.deleteBacSi(new BacSi(Integer.valueOf(req.getParameter("id")), null, null, null));
         resp.sendRedirect("/bac-si/hien-thi");
     }
 

@@ -1,6 +1,7 @@
 package com.fpoly.helloworldsd19201.buoi8.util;
 
 import com.fpoly.helloworldsd19201.buoi8.entity.BacSi;
+import com.fpoly.helloworldsd19201.buoi8.entity.PhongKham;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -25,6 +26,7 @@ public class HibernateConfig {
 
         conf.setProperties(properties);
         conf.addAnnotatedClass(BacSi.class);
+        conf.addAnnotatedClass(PhongKham.class);
         ServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .applySettings(conf.getProperties()).build();
         FACTORY = conf.buildSessionFactory(registry);
