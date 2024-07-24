@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: syn
@@ -15,6 +16,12 @@
     <form action="/bac-si/add" method="post">
         Ten: <input type="text" name="ten"> <br>
         Tuoi: <input type="number" name="tuoi"> <br>
+        Phong kham:
+        <select name="phongKham">
+            <c:forEach items="${danhSachPhongKham}" var="pk">
+                <option value="${pk.id}" label="${pk.ten}"></option>
+            </c:forEach>
+        </select> <br>
         <button>Save</button>
     </form>
 </body>

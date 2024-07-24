@@ -1,7 +1,9 @@
 package com.fpoly.helloworldsd19201.buoi8.controller;
 
 import com.fpoly.helloworldsd19201.buoi8.entity.BacSi;
+import com.fpoly.helloworldsd19201.buoi8.entity.PhongKham;
 import com.fpoly.helloworldsd19201.buoi8.repositories.BacSiRepository;
+import com.fpoly.helloworldsd19201.buoi8.repositories.PhongKhamRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,6 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 })
 public class BacSiServlet extends HttpServlet {
     BacSiRepository bacSiRepository = new BacSiRepository();
+    PhongKhamRepository phongKhamRepository = new PhongKhamRepository();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -52,11 +55,13 @@ public class BacSiServlet extends HttpServlet {
     }
 
     private void viewUpdate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("danhSachPhongKham", phongKhamRepository.getAll());
         req.setAttribute("bs", bacSiRepository.getDetailBacSi(Integer.valueOf(req.getParameter("id"))));
         req.getRequestDispatcher("/buoi8/view-update.jsp").forward(req, resp);
     }
 
     private void viewAdd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("danhSachPhongKham", phongKhamRepository.getAll());
         req.getRequestDispatcher("/buoi8/view-add.jsp").forward(req, resp);
     }
 
@@ -78,14 +83,23 @@ public class BacSiServlet extends HttpServlet {
 
     private void update(HttpServletRequest req, HttpServletResponse resp) throws InvocationTargetException, IllegalAccessException, IOException {
         BacSi bs = new BacSi();
-        BeanUtils.populate(bs, req.getParameterMap());
+        bs.setTen(req.getParameter("ten"));
+        bs.setTuoi(Integer.valueOf(req.getParameter("tuoi")));
+        bs.setId(Integer.valueOf(req.getParameter("id")));
+        PhongKham pk = new PhongKham();
+        pk.setId(Integer.valueOf(req.getParameter("phongKham")));
+        bs.setPhongKham(pk);
         bacSiRepository.updateBacSi(bs);
         resp.sendRedirect("/bac-si/hien-thi");
     }
 
     private void add(HttpServletRequest req, HttpServletResponse resp) throws InvocationTargetException, IllegalAccessException, IOException {
         BacSi bs = new BacSi();
-        BeanUtils.populate(bs, req.getParameterMap());
+        bs.setTen(req.getParameter("ten"));
+        bs.setTuoi(Integer.valueOf(req.getParameter("tuoi")));
+        PhongKham pk = new PhongKham();
+        pk.setId(Integer.valueOf(req.getParameter("phongKham")));
+        bs.setPhongKham(pk);
         bacSiRepository.addBacSi(bs);
         resp.sendRedirect("/bac-si/hien-thi");
     }
