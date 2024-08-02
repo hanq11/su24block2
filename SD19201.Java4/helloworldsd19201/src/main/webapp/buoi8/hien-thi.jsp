@@ -47,5 +47,7 @@
             </c:forEach>
         </tbody>
     </table>
+    <a href="/bac-si/paging?page=${pageNo - 1}">Prev</a>
+    <a href="/bac-si/paging?page=${pageNo + 1}">Next</a>
 </body>
 </html>

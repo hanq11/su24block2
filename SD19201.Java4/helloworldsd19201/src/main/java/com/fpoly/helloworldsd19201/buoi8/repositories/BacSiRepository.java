@@ -20,6 +20,21 @@ public class BacSiRepository {
         return null;
     }
 
+    public ArrayList<BacSi> getAllPaging(int pageNo, int pageSize) {
+        ArrayList<BacSi> danhSach = new ArrayList<>();
+        try(Session session = HibernateConfig.getFACTORY().openSession()) {
+            Query query = session.createQuery("From BacSi");
+            query.setFirstResult((pageNo - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            danhSach = (ArrayList<BacSi>) query.list();
+            System.out.println("AAAAAAAA: " + danhSach.size());
+            return danhSach;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public ArrayList<BacSi> searchByTen(String ten) {
         ArrayList<BacSi> danhSach = new ArrayList<>();
         try(Session session = HibernateConfig.getFACTORY().openSession()) {

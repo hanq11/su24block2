@@ -23,9 +23,11 @@ import java.lang.reflect.InvocationTargetException;
         "/bac-si/update",
         "/bac-si/delete",
         "/bac-si/detail",
-        "/bac-si/search"
+        "/bac-si/search",
+        "/bac-si/paging"
 })
 public class BacSiServlet extends HttpServlet {
+    private final int PAGE_SIZE = 5;
     BacSiRepository bacSiRepository = new BacSiRepository();
     PhongKhamRepository phongKhamRepository = new PhongKhamRepository();
 
@@ -44,7 +46,19 @@ public class BacSiServlet extends HttpServlet {
             detail(req,resp);
         } else if(uri.contains("search")) {
             search(req, resp);
+        } else if(uri.contains("paging")) {
+            hienThiPaging(req, resp);
         }
+    }
+
+    private void hienThiPaging(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int pageNo = 1;
+        if(req.getParameter("page") != null) {
+            pageNo = Integer.valueOf(req.getParameter("page"));
+        }
+        req.setAttribute("pageNo", pageNo);
+        req.setAttribute("danhSach", bacSiRepository.getAllPaging(pageNo, PAGE_SIZE));
+        req.getRequestDispatcher("/buoi8/hien-thi.jsp").forward(req, resp);
     }
 
     private void search(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -101,10 +115,28 @@ public class BacSiServlet extends HttpServlet {
         resp.sendRedirect("/bac-si/hien-thi");
     }
 
-    private void add(HttpServletRequest req, HttpServletResponse resp) throws InvocationTargetException, IllegalAccessException, IOException {
+    private void add(HttpServletRequest req, HttpServletResponse resp) throws InvocationTargetException, IllegalAccessException, IOException, ServletException {
         BacSi bs = new BacSi();
-        bs.setTen(req.getParameter("ten"));
-        bs.setTuoi(Integer.valueOf(req.getParameter("tuoi")));
+        String ten = req.getParameter("ten");
+        String tuoiString = req.getParameter("tuoi");
+        // flag = 0: Khong loi
+        // flag = 1: Co loi
+        int flag = 0;
+        if(ten.trim().length() == 0) {
+            req.setAttribute("errorTen", "Vui long nhap ten");
+            flag = 1;
+        }
+        if(tuoiString.length() == 0) {
+            req.setAttribute("errorTuoi", "Vui long nhap tuoi");
+            flag = 1;
+        }
+        if(flag == 1) {
+            req.setAttribute("danhSachPhongKham", phongKhamRepository.getAll());
+            req.getRequestDispatcher("/buoi8/view-add.jsp").forward(req, resp);
+        }
+
+        bs.setTen(ten);
+        bs.setTuoi(Integer.valueOf(tuoiString));
         PhongKham pk = new PhongKham();
         pk.setId(Integer.valueOf(req.getParameter("phongKham")));
         bs.setPhongKham(pk);

@@ -14,15 +14,15 @@
 <body>
     <h2>Add</h2>
     <form action="/bac-si/add" method="post">
-        Ten: <input type="text" name="ten"> <br>
-        Tuoi: <input type="number" name="tuoi"> <br>
+        Ten: <input type="text" name="ten"> <span>${errorTen}</span><br>
+        Tuoi: <input type="number" name="tuoi"> <span>${errorTuoi}</span><br>
         Phong kham:
         <select name="phongKham">
             <c:forEach items="${danhSachPhongKham}" var="pk">
                 <option value="${pk.id}" label="${pk.ten}"></option>
             </c:forEach>
         </select> <br>
-        <button>Save</button>
+        <button type="submit" onclick="return confirm('Ban co muon add khong')">Save</button>
     </form>
 </body>
 </html>
