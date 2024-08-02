@@ -22,7 +22,8 @@ import java.lang.reflect.InvocationTargetException;
         "/bac-si/add",
         "/bac-si/update",
         "/bac-si/delete",
-        "/bac-si/detail"
+        "/bac-si/detail",
+        "/bac-si/search"
 })
 public class BacSiServlet extends HttpServlet {
     BacSiRepository bacSiRepository = new BacSiRepository();
@@ -41,7 +42,14 @@ public class BacSiServlet extends HttpServlet {
             delete(req,resp);
         } else if(uri.contains("detail")) {
             detail(req,resp);
+        } else if(uri.contains("search")) {
+            search(req, resp);
         }
+    }
+
+    private void search(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("danhSach", bacSiRepository.searchByTen(req.getParameter("ten")));
+        req.getRequestDispatcher("/buoi8/hien-thi.jsp").forward(req, resp);
     }
 
     private void detail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

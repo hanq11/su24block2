@@ -15,7 +15,7 @@ public class BacSi {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "ten")
+    @Column(name = "tenBacSi")
     private String ten;
 
     @Column(name = "tuoi")

@@ -11,6 +11,13 @@
 <head>
     <title>Title</title>
 </head>
+
+<h2>Search</h2>
+<form action="/bac-si/search" method="get">
+    Ten: <input type="text" name="ten"> <br>
+    <button type="submit">Submit</button>
+</form>
+
 <button><a href="/bac-si/view-add">Them</a></button>
 <body>
     <h2>Table</h2>
